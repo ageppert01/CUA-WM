@@ -1,0 +1,27 @@
+universe = container
+container_image = docker://ageppert01/chtc-cua:latest
+
+executable = /bin/bash
+arguments = startup.sh smoke-test
+
+JobName = smoke_test
+log = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).log
+error = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).err
+output = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).out
+
+should_transfer_files = YES
+# `core` (no trailing slash) transfers the whole directory recursively.
+transfer_input_files = startup.sh, common.sh, smoke_test_framework.py, test_screenshot.png, core
+when_to_transfer_output = ON_EXIT
+
+request_cpus = 1
+request_memory = 40GB
+request_disk = 40GB
+
++WantGPULab = true
++GPUJobLength = "short"
+gpus_minimum_memory = 48GB
++RequireExclusiveGPU = true
+request_gpus = 1
+
+queue

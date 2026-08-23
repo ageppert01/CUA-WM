@@ -1,0 +1,44 @@
+# train_world_model.sub
+#
+# HTCondor submit file for LoRA fine-tuning of OpenCUA-7B.
+# Requires GPU.
+#
+# The SMOKE_TEST variable in run_train.sh controls whether this
+# does a quick 10-step validation or a full training run.
+# Default is SMOKE_TEST=1 (smoke test). Change to 0 for full training.
+#
+# Usage:
+#   mkdir -p logs
+#   condor_submit train_world_model.sub
+
+universe                = container
+container_image         = docker://ageppert01/chtc-cua:latest
+
+executable              = /bin/bash
+arguments               = run_train.sh
+
+JobName                 = train_world_model/train_wm
+
+log                     = logs/$(JobName)_$(Cluster)_$(Process).log
+error                   = logs/$(JobName)_$(Cluster)_$(Process).err
+output                  = logs/$(JobName)_$(Cluster)_$(Process).out
+
+should_transfer_files   = YES
+# train_world_model.py is self-contained (does not import from core/).
+transfer_input_files    = train_world_model.py, run_train.sh, common.sh
+# Only transfer a small status file, not the full model/packages.
+# The LoRA adapter goes directly to HuggingFace.
+transfer_output_files   = training_status.txt
+when_to_transfer_output = ON_EXIT
+
+# Request GPU resources
+request_gpus            = 1
++WantGPULab = true
++GPUJobLength = "short"
+gpus_minimum_memory = 40GB
+request_cpus            = 4
+request_memory          = 40GB
+request_disk            = 50GB
+
+
+queue

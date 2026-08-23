@@ -1,0 +1,28 @@
+# CUA-WM dependencies.
+#
+# On CHTC these are NOT installed as one set. The container image
+# (docker://ageppert01/chtc-cua:latest) bakes in the CUDA-bound and
+# version-pinned packages; the job scripts pip-install the rest into a local
+# ./pip_packages at runtime and then strip anything that would shadow the
+# container's copy. See CONTAINER_PACKAGES in world_modeling/common.sh.
+#
+# This file is the single flat list, for running outside the cluster.
+
+# --- Provided by the container; pinned, do not upgrade blindly ---
+# transformers is held at 4.53.0 because OpenCUA-7B ships custom modeling code
+# that breaks on later releases. huggingface_hub must stay <1.0 for the same
+# reason — common.sh actively removes a >=1.0 resolution if pip picks one.
+torch
+transformers==4.53.0
+tokenizers
+numpy
+accelerate>=0.34,<1.0
+flask
+
+# --- pip-installed at job runtime ---
+trl>=0.14,<0.16
+peft>=0.12,<0.14
+huggingface_hub>=0.25,<1.0
+datasets
+bitsandbytes
+Pillow

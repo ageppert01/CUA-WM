@@ -1,0 +1,30 @@
+universe = container
+container_image = docker://ageppert01/chtc-cua:latest
+
+executable = /bin/bash
+arguments = startup.sh framework-no-greedy-after-code
+
+JobName = framework_no_greedy_after_code
+log = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).log
+error = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).err
+output = logs/api_jobs/$(JobName)_$(Cluster)_$(Process).out
+
+stream_output = True
+stream_error = True
+
+should_transfer_files = YES
+# `core` (no trailing slash) transfers the whole directory recursively.
+transfer_input_files = tunnel_key, startup.sh, common.sh, framework_api.py, core
+when_to_transfer_output = ON_EXIT
+
+request_cpus = 1
+request_memory = 40GB
+request_disk = 40GB
+
++WantGPULab = true
++GPUJobLength = "short"
+gpus_minimum_memory = 48GB
++RequireExclusiveGPU = true
+request_gpus = 1
+
+queue

@@ -1,0 +1,36 @@
+# preprocess_transitions.sub
+#
+# HTCondor submit file for preprocessing AgentNet into world model training data.
+# CPU-only batch job.
+#
+# Imports core.prompts so it can share the world-model prompt templates with
+# inference-time code (single source of truth — preprocess and the world model
+# step in core/pipeline.py use byte-identical prompts).
+#
+# Usage:
+#   mkdir -p logs
+#   condor_submit preprocess_transitions.sub
+
+universe                = container
+container_image         = docker://ageppert01/chtc-cua:latest
+
+executable              = /bin/bash
+arguments               = run_preprocess.sh
+
+JobName                 = preprocess
+
+log                     = logs/preprocess/$(JobName)_$(Cluster)_$(Process).log
+error                   = logs/preprocess/$(JobName)_$(Cluster)_$(Process).err
+output                  = logs/preprocess/$(JobName)_$(Cluster)_$(Process).out
+
+should_transfer_files   = YES
+# `core` (no trailing slash) transfers the whole directory recursively.
+transfer_input_files    = preprocess_transitions.py, run_preprocess.sh, common.sh, core
+transfer_output_files   = transition_train.jsonl, transition_val.jsonl, preprocessing_stats.txt
+when_to_transfer_output = ON_EXIT
+
+request_cpus            = 1
+request_memory          = 20GB
+request_disk            = 20GB
+
+queue

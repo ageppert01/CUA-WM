@@ -1,0 +1,35 @@
+# --- Secrets & local config ---
+.env
+tunnel_key
+tunnel_key.pub
+*.pem
+
+# --- Model weights (fetched at runtime, never committed) ---
+OpenCUA-7B/
+*.safetensors
+*.bin
+
+# --- Container images (built or pulled, ~4 GB) ---
+*.sif
+
+# --- Datasets & run artifacts ---
+*.jsonl
+pip_packages/
+world_modeling/trash/
+
+# --- HTCondor job logs ---
+logs/
+*.err
+*.out
+*.log
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- Editors & OS ---
+.vscode/
+.idea/
+.DS_Store

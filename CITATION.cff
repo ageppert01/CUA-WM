@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "CUA-WM: Augmenting Frozen Computer-Use Agents with SFT-Based World Modeling"
+abstract: >-
+  A five-step pipeline that wraps a frozen OpenCUA-7B computer-use agent in a
+  learned world model — state estimation, candidate action generation,
+  LoRA-fine-tuned transition prediction, LLM-as-judge scoring, and response
+  assembly — improving OSWorld success rate from 24.8% to 31.0% and
+  infeasible-task recognition from 44.4% to 85.7% without retraining the policy.
+type: software
+authors:
+  - family-names: Geppert
+    given-names: Alexander
+    affiliation: "University of Wisconsin–Madison"
+repository-code: "https://github.com/ageppert01/CUA-WM"
+license: MIT
+keywords:
+  - computer-use agents
+  - world models
+  - vision-language models
+  - LoRA
+  - OSWorld
